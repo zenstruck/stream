@@ -131,6 +131,7 @@ final class StreamTest extends TestCase
 
         $this->assertSame('php://memory', $stream->metadata()['uri']);
         $this->assertSame('php://memory', $stream->metadata('uri'));
+        $this->assertTrue($stream->isSeekable());
     }
 
     /**

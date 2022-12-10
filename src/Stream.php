@@ -104,7 +104,7 @@ final class Stream
      */
     public function contents(?int $length = null, int $offset = -1): string
     {
-        if ($this->metadata('seekable')) {
+        if ($this->isSeekable()) {
             $this->rewind();
         }
 
@@ -120,7 +120,7 @@ final class Stream
      */
     public function rewind(): self
     {
-        if (!$this->metadata('seekable')) {
+        if (!$this->isSeekable()) {
             throw new \RuntimeException('Stream does not support seeking.');
         }
 
@@ -129,6 +129,11 @@ final class Stream
         }
 
         return $this;
+    }
+
+    public function isSeekable(): bool
+    {
+        return $this->metadata('seekable');
     }
 
     /**
