@@ -5,7 +5,7 @@ namespace Zenstruck;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class Stream
+final class Stream implements \Stringable
 {
     /** @var resource */
     private $resource;
@@ -20,6 +20,11 @@ final class Stream
         }
 
         $this->resource = $resource;
+    }
+
+    public function __toString(): string
+    {
+        return $this->contents();
     }
 
     /**
@@ -104,7 +109,7 @@ final class Stream
      */
     public function contents(?int $length = null, int $offset = -1): string
     {
-        if ($this->metadata('seekable')) {
+        if ($this->isSeekable()) {
             $this->rewind();
         }
 
@@ -116,11 +121,25 @@ final class Stream
     }
 
     /**
+     * @see \file_put_contents()
+     *
+     * @param resource|null $context
+     */
+    public function putContents(string $filename, int $flags = 0, $context = null): self
+    {
+        if (false === @\file_put_contents($filename, $this->get(), $flags, $context)) {
+            throw new \RuntimeException(\sprintf('Unable to dump contents of stream to "%s".', $filename));
+        }
+
+        return $this;
+    }
+
+    /**
      * @see \rewind()
      */
     public function rewind(): self
     {
-        if (!$this->metadata('seekable')) {
+        if (!$this->isSeekable()) {
             throw new \RuntimeException('Stream does not support seeking.');
         }
 
@@ -129,6 +148,21 @@ final class Stream
         }
 
         return $this;
+    }
+
+    public function isOpen(): bool
+    {
+        return \is_resource($this->resource);
+    }
+
+    public function isClosed(): bool
+    {
+        return !$this->isOpen();
+    }
+
+    public function isSeekable(): bool
+    {
+        return $this->metadata('seekable');
     }
 
     /**

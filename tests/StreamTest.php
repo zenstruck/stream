@@ -31,6 +31,14 @@ final class StreamTest extends TestCase
     /**
      * @test
      */
+    public function stringable(): void
+    {
+        $this->assertSame('some data', (string) Stream::wrap('some data'));
+    }
+
+    /**
+     * @test
+     */
     public function cannot_write_invalid_data(): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -131,6 +139,7 @@ final class StreamTest extends TestCase
 
         $this->assertSame('php://memory', $stream->metadata()['uri']);
         $this->assertSame('php://memory', $stream->metadata('uri'));
+        $this->assertTrue($stream->isSeekable());
     }
 
     /**
@@ -165,5 +174,38 @@ final class StreamTest extends TestCase
         $stream = Stream::inMemory();
 
         $this->assertIsInt($stream->id());
+    }
+
+    /**
+     * @test
+     */
+    public function is_open_closed(): void
+    {
+        $stream = Stream::wrap($resource = \fopen(__FILE__, 'r'));
+
+        $this->assertTrue($stream->isOpen());
+        $this->assertFalse($stream->isClosed());
+
+        \fclose($resource);
+
+        $this->assertFalse($stream->isOpen());
+        $this->assertTrue($stream->isClosed());
+    }
+
+    /**
+     * @test
+     */
+    public function put_contents(): void
+    {
+        $file = Stream::tempFile()->uri();
+
+        \file_put_contents($file, '');
+
+        $this->assertFileExists($file);
+        $this->assertSame('', \file_get_contents($file));
+
+        Stream::wrap('content')->putContents($file);
+
+        $this->assertSame('content', \file_get_contents($file));
     }
 }
