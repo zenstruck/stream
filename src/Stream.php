@@ -121,6 +121,20 @@ final class Stream implements \Stringable
     }
 
     /**
+     * @see \file_put_contents()
+     *
+     * @param resource|null $context
+     */
+    public function putContents(string $filename, int $flags = 0, $context = null): self
+    {
+        if (false === @\file_put_contents($filename, $this->get(), $flags, $context)) {
+            throw new \RuntimeException(\sprintf('Unable to dump contents of stream to "%s".', $filename));
+        }
+
+        return $this;
+    }
+
+    /**
      * @see \rewind()
      */
     public function rewind(): self

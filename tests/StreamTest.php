@@ -191,4 +191,21 @@ final class StreamTest extends TestCase
         $this->assertFalse($stream->isOpen());
         $this->assertTrue($stream->isClosed());
     }
+
+    /**
+     * @test
+     */
+    public function put_contents(): void
+    {
+        $file = Stream::tempFile()->uri();
+
+        \file_put_contents($file, '');
+
+        $this->assertFileExists($file);
+        $this->assertSame('', \file_get_contents($file));
+
+        Stream::wrap('content')->putContents($file);
+
+        $this->assertSame('content', \file_get_contents($file));
+    }
 }
