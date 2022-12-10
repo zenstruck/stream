@@ -136,6 +136,16 @@ final class Stream implements \Stringable
         return $this;
     }
 
+    public function isOpen(): bool
+    {
+        return \is_resource($this->resource);
+    }
+
+    public function isClosed(): bool
+    {
+        return !$this->isOpen();
+    }
+
     public function isSeekable(): bool
     {
         return $this->metadata('seekable');

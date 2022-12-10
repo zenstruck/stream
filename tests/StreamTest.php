@@ -175,4 +175,20 @@ final class StreamTest extends TestCase
 
         $this->assertIsInt($stream->id());
     }
+
+    /**
+     * @test
+     */
+    public function is_open_closed(): void
+    {
+        $stream = Stream::wrap($resource = \fopen(__FILE__, 'r'));
+
+        $this->assertTrue($stream->isOpen());
+        $this->assertFalse($stream->isClosed());
+
+        \fclose($resource);
+
+        $this->assertFalse($stream->isOpen());
+        $this->assertTrue($stream->isClosed());
+    }
 }
