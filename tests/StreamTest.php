@@ -31,6 +31,14 @@ final class StreamTest extends TestCase
     /**
      * @test
      */
+    public function stringable(): void
+    {
+        $this->assertSame('some data', (string) Stream::wrap('some data'));
+    }
+
+    /**
+     * @test
+     */
     public function cannot_write_invalid_data(): void
     {
         $this->expectException(\InvalidArgumentException::class);

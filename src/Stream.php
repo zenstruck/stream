@@ -5,7 +5,7 @@ namespace Zenstruck;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class Stream
+final class Stream implements \Stringable
 {
     /** @var resource */
     private $resource;
@@ -20,6 +20,11 @@ final class Stream
         }
 
         $this->resource = $resource;
+    }
+
+    public function __toString(): string
+    {
+        return $this->contents();
     }
 
     /**
