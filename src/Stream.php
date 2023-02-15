@@ -18,6 +18,7 @@ final class Stream implements \Stringable
 {
     /** @var resource */
     private $resource;
+    private bool $autoClose = false;
 
     /**
      * @param resource $resource
@@ -29,6 +30,13 @@ final class Stream implements \Stringable
         }
 
         $this->resource = $resource;
+    }
+
+    public function __destruct()
+    {
+        if ($this->autoClose) {
+            $this->close();
+        }
     }
 
     public function __toString(): string
@@ -83,6 +91,13 @@ final class Stream implements \Stringable
         }
 
         return new self($handle);
+    }
+
+    public function autoClose(): self
+    {
+        $this->autoClose = true;
+
+        return $this;
     }
 
     /**

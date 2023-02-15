@@ -34,6 +34,9 @@ $stream = Stream::inOutput();
 
 // \tmpfile()
 $stream = Stream::tempFile();
+
+// autoclose on $stream __destruct
+$stream->autoClose(); // Stream
 ```
 
 ### Use Stream Object

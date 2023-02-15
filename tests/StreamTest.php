@@ -217,4 +217,19 @@ final class StreamTest extends TestCase
 
         $this->assertSame('content', \file_get_contents($file));
     }
+
+    /**
+     * @test
+     */
+    public function can_auto_close(): void
+    {
+        $stream = Stream::inMemory()->autoClose();
+        $resource = $stream->get();
+
+        $this->assertIsNotClosedResource($resource);
+
+        unset($stream);
+
+        $this->assertIsClosedResource($resource);
+    }
 }
