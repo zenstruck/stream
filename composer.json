@@ -11,13 +11,13 @@
         }
     ],
     "require": {
-        "php": ">=8.0"
+        "php": ">=8.1"
     },
     "require-dev": {
         "phpstan/phpstan": "^1.4",
         "phpunit/phpunit": "^9.6.19",
-        "symfony/phpunit-bridge": "^6.1",
-        "symfony/var-dumper": "^5.4|^6.0"
+        "symfony/phpunit-bridge": "^6.4|^7.0|^8.0",
+        "symfony/var-dumper": "^6.4|^7.0|^8.0"
     },
     "config": {
         "preferred-install": "dist",
@@ -28,5 +28,7 @@
     },
     "autoload-dev": {
         "psr-4": { "Zenstruck\\Tests\\": ["tests/"] }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
